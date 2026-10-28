@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>مصنع العجمي للمراتب | Elagamy Mattress Factory</title>
-<meta name="description" content="مصنع العجمي للمراتب - نوم مريح يليق بيك. مراتب سوست، مراتب طبية، تكاوي.">
+<meta name="description" content="مصنع العجمي للمراتب - نوم مريح يليق بيك. مراتب سوست، مراتب طبية، تكاوي، مخدات.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -177,7 +177,7 @@
     </h2>
 
     <p class="text-white/65 text-sm md:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
-      من قلب مصنع العجمي، نصنع لك مراتب سوست وطبية وتكاوي بأعلى معايير الجودة والراحة،
+      من قلب مصنع العجمي، نصنع لك مراتب سوست وطبية وتكاوي ومخدات بأعلى معايير الجودة والراحة،
       لتمنحك نومًا عميقًا كل ليلة.
     </p>
 
@@ -206,11 +206,11 @@
       <h2 class="text-3xl md:text-5xl font-black mb-4">اختر ما يناسب راحتك</h2>
       <div class="w-20 h-1 bg-gold rounded-full mx-auto mb-5"></div>
       <p class="text-white/50 text-sm md:text-base max-w-xl mx-auto">
-        تصفح أقسام المصنع واختر المرتبة أو التكاية التي تناسب احتياجك.
+        تصفح أقسام المصنع واختر المرتبة أو التكاية أو المخدة التي تناسب احتياجك.
       </p>
     </div>
 
-    <div id="categoriesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"></div>
+    <div id="categoriesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8"></div>
   </div>
 </section>
 
@@ -433,7 +433,7 @@
           <form id="prodForm" class="space-y-4">
             <div>
               <label class="block text-[11px] font-bold text-white/50 mb-2">اسم المنتج</label>
-              <input id="prodName" type="text" class="field" placeholder="مثال: مرتبة سوست 160 سم" required>
+              <input id="prodName" type="text" class="field" placeholder="مثال: مرتبة سوست 160 سم - سماكة 30" required>
             </div>
             <div>
               <label class="block text-[11px] font-bold text-white/50 mb-2">السعر (ج.م)</label>
@@ -491,9 +491,10 @@ document.addEventListener('DOMContentLoaded', function () {
   var IMG_SPRING  = 'https://i.ibb.co/KcnNPvNq/9bb098ca-3990-4941-9c56-0b6993a994f9.jpg';
   var IMG_MEDICAL = 'https://i.ibb.co/ns1ZWLSK/a5cb30da-52a4-4545-a09d-6c6cf6a230a6.jpg';
   var IMG_TAKY    = 'https://i.ibb.co/qFB6t55v/90d697b1-d3a3-49c4-adfb-ea2da273129d.jpg';
+  var IMG_PILLOW  = 'https://i.ibb.co/qFB6t55v/90d697b1-d3a3-49c4-adfb-ea2da273129d.jpg'; /* مؤقتاً */
 
   /* رقم استقبال الطلبات على الواتساب (لا يظهر كنص داخل الموقع) */
-  var WHATSAPP_NUMBER = '201000000000';
+  var WHATSAPP_NUMBER = '201003555377';
 
   var SUPABASE_URL = 'https://lcmjddknwlbmrtbpfvsr.supabase.co';
   var SUPABASE_KEY = 'sb_publishable_TeSRgTFkPk6zAr0NR6vbeg_8a4qi3_V';
@@ -501,9 +502,9 @@ document.addEventListener('DOMContentLoaded', function () {
   var ADMIN_EMAIL = 'msn3elagamy@gmail.com';
   var ADMIN_PASS  = 'elagamynum1ok';
 
-  var LS_CATS  = 'elagamy_categories_v1';
-  var LS_PRODS = 'elagamy_products_v1';
-  var LS_CART  = 'elagamy_cart_v1';
+  var LS_CATS  = 'elagamy_categories_v2';
+  var LS_PRODS = 'elagamy_products_v2';
+  var LS_CART  = 'elagamy_cart_v2';
 
   /* ============================================================
      SUPABASE CLIENT
@@ -519,22 +520,163 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   /* ============================================================
-     DEFAULT (HARDCODED) DATA
+     DEFAULT (HARDCODED) DATA — بيانات حقيقية 100%
      ============================================================ */
   var DEFAULT_CATEGORIES = [
     { id: 'cat-spring',  name: 'مراتب سوست', image: IMG_SPRING  },
     { id: 'cat-medical', name: 'مراتب طبية', image: IMG_MEDICAL },
-    { id: 'cat-taky',    name: 'تكاوي',      image: IMG_TAKY    }
+    { id: 'cat-takawi',  name: 'تكاوي',      image: IMG_TAKY    },
+    { id: 'cat-pillows', name: 'مخدات',      image: IMG_PILLOW  }
   ];
 
   var DEFAULT_PRODUCTS = [
-    { id: 'p-1', name: 'مرتبة سوست 160 سم',  price: 6500, category_id: 'cat-spring',  image: IMG_SPRING  },
-    { id: 'p-2', name: 'مرتبة سوست 120 سم',  price: 5200, category_id: 'cat-spring',  image: IMG_SPRING  },
-    { id: 'p-3', name: 'مرتبة سوست 180 سم',  price: 7400, category_id: 'cat-spring',  image: IMG_SPRING  },
-    { id: 'p-4', name: 'مرتبة طبية 160 سم',  price: 5900, category_id: 'cat-medical', image: IMG_MEDICAL },
-    { id: 'p-5', name: 'مرتبة طبية 120 سم',  price: 4600, category_id: 'cat-medical', image: IMG_MEDICAL },
-    { id: 'p-6', name: 'تكاية',              price: 170,  category_id: 'cat-taky',    image: IMG_TAKY    },
-    { id: 'p-7', name: 'تكاية طبية كبيرة',   price: 250,  category_id: 'cat-taky',    image: IMG_TAKY    }
+    /* ============ مراتب سوست — cat-spring ============ */
+    /* مقاس 100 */
+    { id: 'p-1',   name: 'مرتبة سوست 100 سم - سماكة 25',              price: 3850, category_id: 'cat-spring', image: IMG_SPRING },
+    { id: 'p-2',   name: 'مرتبة سوست 100 سم - سماكة 27',              price: 4025, category_id: 'cat-spring', image: IMG_SPRING },
+    { id: 'p-3',   name: 'مرتبة سوست 100 سم - سماكة 30',              price: 4200, category_id: 'cat-spring', image: IMG_SPRING },
+    { id: 'p-4',   name: 'مرتبة سوست 100 سم - وجهين ميلاتوب 33',      price: 5375, category_id: 'cat-spring', image: IMG_SPRING },
+    /* مقاس 110 */
+    { id: 'p-5',   name: 'مرتبة سوست 110 سم - سماكة 25',              price: 4200, category_id: 'cat-spring', image: IMG_SPRING },
+    { id: 'p-6',   name: 'مرتبة سوست 110 سم - سماكة 27',              price: 4400, category_id: 'cat-spring', image: IMG_SPRING },
+    { id: 'p-7',   name: 'مرتبة سوست 110 سم - سماكة 30',              price: 4600, category_id: 'cat-spring', image: IMG_SPRING },
+    { id: 'p-8',   name: 'مرتبة سوست 110 سم - وجهين ميلاتوب 33',      price: 5800, category_id: 'cat-spring', image: IMG_SPRING },
+    /* مقاس 120 */
+    { id: 'p-9',   name: 'مرتبة سوست 120 سم - سماكة 25',              price: 4550, category_id: 'cat-spring', image: IMG_SPRING },
+    { id: 'p-10',  name: 'مرتبة سوست 120 سم - سماكة 27',              price: 4750, category_id: 'cat-spring', image: IMG_SPRING },
+    { id: 'p-11',  name: 'مرتبة سوست 120 سم - سماكة 30',              price: 4950, category_id: 'cat-spring', image: IMG_SPRING },
+    { id: 'p-12',  name: 'مرتبة سوست 120 سم - وجهين ميلاتوب 33',      price: 6150, category_id: 'cat-spring', image: IMG_SPRING },
+    /* مقاس 130 */
+    { id: 'p-13',  name: 'مرتبة سوست 130 سم - سماكة 25',              price: 5000, category_id: 'cat-spring', image: IMG_SPRING },
+    { id: 'p-14',  name: 'مرتبة سوست 130 سم - سماكة 27',              price: 5250, category_id: 'cat-spring', image: IMG_SPRING },
+    { id: 'p-15',  name: 'مرتبة سوست 130 سم - سماكة 30',              price: 5500, category_id: 'cat-spring', image: IMG_SPRING },
+    { id: 'p-16',  name: 'مرتبة سوست 130 سم - وجهين ميلاتوب 33',      price: 6750, category_id: 'cat-spring', image: IMG_SPRING },
+    /* مقاس 140 */
+    { id: 'p-17',  name: 'مرتبة سوست 140 سم - سماكة 25',              price: 5400, category_id: 'cat-spring', image: IMG_SPRING },
+    { id: 'p-18',  name: 'مرتبة سوست 140 سم - سماكة 27',              price: 5700, category_id: 'cat-spring', image: IMG_SPRING },
+    { id: 'p-19',  name: 'مرتبة سوست 140 سم - سماكة 30',              price: 6000, category_id: 'cat-spring', image: IMG_SPRING },
+    { id: 'p-20',  name: 'مرتبة سوست 140 سم - وجهين ميلاتوب 33',      price: 7300, category_id: 'cat-spring', image: IMG_SPRING },
+    /* مقاس 150 */
+    { id: 'p-21',  name: 'مرتبة سوست 150 سم - سماكة 25',              price: 5550, category_id: 'cat-spring', image: IMG_SPRING },
+    { id: 'p-22',  name: 'مرتبة سوست 150 سم - سماكة 27',              price: 5825, category_id: 'cat-spring', image: IMG_SPRING },
+    { id: 'p-23',  name: 'مرتبة سوست 150 سم - سماكة 30',              price: 6100, category_id: 'cat-spring', image: IMG_SPRING },
+    { id: 'p-24',  name: 'مرتبة سوست 150 سم - وجهين ميلاتوب 33',      price: 7375, category_id: 'cat-spring', image: IMG_SPRING },
+    /* مقاس 160 */
+    { id: 'p-25',  name: 'مرتبة سوست 160 سم - سماكة 25',              price: 5900, category_id: 'cat-spring', image: IMG_SPRING },
+    { id: 'p-26',  name: 'مرتبة سوست 160 سم - سماكة 27',              price: 6200, category_id: 'cat-spring', image: IMG_SPRING },
+    { id: 'p-27',  name: 'مرتبة سوست 160 سم - سماكة 30',              price: 6500, category_id: 'cat-spring', image: IMG_SPRING },
+    { id: 'p-28',  name: 'مرتبة سوست 160 سم - وجهين ميلاتوب 33',      price: 7800, category_id: 'cat-spring', image: IMG_SPRING },
+    /* مقاس 170 */
+    { id: 'p-29',  name: 'مرتبة سوست 170 سم - سماكة 25',              price: 6200, category_id: 'cat-spring', image: IMG_SPRING },
+    { id: 'p-30',  name: 'مرتبة سوست 170 سم - سماكة 27',              price: 6500, category_id: 'cat-spring', image: IMG_SPRING },
+    { id: 'p-31',  name: 'مرتبة سوست 170 سم - سماكة 30',              price: 6800, category_id: 'cat-spring', image: IMG_SPRING },
+    { id: 'p-32',  name: 'مرتبة سوست 170 سم - وجهين ميلاتوب 33',      price: 8100, category_id: 'cat-spring', image: IMG_SPRING },
+    /* مقاس 180 */
+    { id: 'p-33',  name: 'مرتبة سوست 180 سم - سماكة 25',              price: 6550, category_id: 'cat-spring', image: IMG_SPRING },
+    { id: 'p-34',  name: 'مرتبة سوست 180 سم - سماكة 27',              price: 6855, category_id: 'cat-spring', image: IMG_SPRING },
+    { id: 'p-35',  name: 'مرتبة سوست 180 سم - سماكة 30',              price: 7160, category_id: 'cat-spring', image: IMG_SPRING },
+    { id: 'p-36',  name: 'مرتبة سوست 180 سم - وجهين ميلاتوب 33',      price: 8600, category_id: 'cat-spring', image: IMG_SPRING },
+
+    /* ============ مراتب طبية — cat-medical ============ */
+    /* مقاس 100 */
+    { id: 'p-37',  name: 'مرتبة طبية 100 سم - طبي 20',                price: 4300, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-38',  name: 'مرتبة طبية 100 سم - ميلاتوب 20',            price: 4800, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-39',  name: 'مرتبة طبية 100 سم - طبي 25',                price: 4950, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-40',  name: 'مرتبة طبية 100 سم - ميلاتوب 25',            price: 5450, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-41',  name: 'مرتبة طبية 100 سم - طبي 27',                price: 5225, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-42',  name: 'مرتبة طبية 100 سم - ميلاتوب 27',            price: 5725, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-43',  name: 'مرتبة طبية 100 سم - طبي 30',                price: 5500, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-44',  name: 'مرتبة طبية 100 سم - ميلاتوب 30',            price: 6000, category_id: 'cat-medical', image: IMG_MEDICAL },
+    /* مقاس 110 */
+    { id: 'p-45',  name: 'مرتبة طبية 110 سم - طبي 20',                price: 4700, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-46',  name: 'مرتبة طبية 110 سم - ميلاتوب 20',            price: 5200, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-47',  name: 'مرتبة طبية 110 سم - طبي 25',                price: 5400, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-48',  name: 'مرتبة طبية 110 سم - ميلاتوب 25',            price: 5900, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-49',  name: 'مرتبة طبية 110 سم - طبي 27',                price: 5700, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-50',  name: 'مرتبة طبية 110 سم - ميلاتوب 27',            price: 6200, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-51',  name: 'مرتبة طبية 110 سم - طبي 30',                price: 6000, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-52',  name: 'مرتبة طبية 110 سم - ميلاتوب 30',            price: 6500, category_id: 'cat-medical', image: IMG_MEDICAL },
+    /* مقاس 120 */
+    { id: 'p-53',  name: 'مرتبة طبية 120 سم - طبي 20',                price: 5100, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-54',  name: 'مرتبة طبية 120 سم - ميلاتوب 20',            price: 5600, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-55',  name: 'مرتبة طبية 120 سم - طبي 25',                price: 5850, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-56',  name: 'مرتبة طبية 120 سم - ميلاتوب 25',            price: 6350, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-57',  name: 'مرتبة طبية 120 سم - طبي 27',                price: 6175, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-58',  name: 'مرتبة طبية 120 سم - ميلاتوب 27',            price: 6675, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-59',  name: 'مرتبة طبية 120 سم - طبي 30',                price: 6500, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-60',  name: 'مرتبة طبية 120 سم - ميلاتوب 30',            price: 7000, category_id: 'cat-medical', image: IMG_MEDICAL },
+    /* مقاس 130 */
+    { id: 'p-61',  name: 'مرتبة طبية 130 سم - طبي 20',                price: 5600, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-62',  name: 'مرتبة طبية 130 سم - ميلاتوب 20',            price: 6100, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-63',  name: 'مرتبة طبية 130 سم - طبي 25',                price: 6500, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-64',  name: 'مرتبة طبية 130 سم - ميلاتوب 25',            price: 7000, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-65',  name: 'مرتبة طبية 130 سم - طبي 27',                price: 6900, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-66',  name: 'مرتبة طبية 130 سم - ميلاتوب 27',            price: 7400, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-67',  name: 'مرتبة طبية 130 سم - طبي 30',                price: 7300, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-68',  name: 'مرتبة طبية 130 سم - ميلاتوب 30',            price: 7800, category_id: 'cat-medical', image: IMG_MEDICAL },
+    /* مقاس 140 */
+    { id: 'p-69',  name: 'مرتبة طبية 140 سم - طبي 20',                price: 6000, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-70',  name: 'مرتبة طبية 140 سم - ميلاتوب 20',            price: 6500, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-71',  name: 'مرتبة طبية 140 سم - طبي 25',                price: 6900, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-72',  name: 'مرتبة طبية 140 سم - ميلاتوب 25',            price: 7400, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-73',  name: 'مرتبة طبية 140 سم - طبي 27',                price: 7350, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-74',  name: 'مرتبة طبية 140 سم - ميلاتوب 27',            price: 7850, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-75',  name: 'مرتبة طبية 140 سم - طبي 30',                price: 7800, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-76',  name: 'مرتبة طبية 140 سم - ميلاتوب 30',            price: 8300, category_id: 'cat-medical', image: IMG_MEDICAL },
+    /* مقاس 150 */
+    { id: 'p-77',  name: 'مرتبة طبية 150 سم - طبي 20',                price: 6200, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-78',  name: 'مرتبة طبية 150 سم - ميلاتوب 20',            price: 6700, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-79',  name: 'مرتبة طبية 150 سم - طبي 25',                price: 7200, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-80',  name: 'مرتبة طبية 150 سم - ميلاتوب 25',            price: 7700, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-81',  name: 'مرتبة طبية 150 سم - طبي 27',                price: 7600, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-82',  name: 'مرتبة طبية 150 سم - ميلاتوب 27',            price: 8100, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-83',  name: 'مرتبة طبية 150 سم - طبي 30',                price: 8000, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-84',  name: 'مرتبة طبية 150 سم - ميلاتوب 30',            price: 8500, category_id: 'cat-medical', image: IMG_MEDICAL },
+    /* مقاس 160 */
+    { id: 'p-85',  name: 'مرتبة طبية 160 سم - طبي 20',                price: 6600, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-86',  name: 'مرتبة طبية 160 سم - ميلاتوب 20',            price: 7100, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-87',  name: 'مرتبة طبية 160 سم - طبي 25',                price: 7650, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-88',  name: 'مرتبة طبية 160 سم - ميلاتوب 25',            price: 8150, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-89',  name: 'مرتبة طبية 160 سم - طبي 27',                price: 8075, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-90',  name: 'مرتبة طبية 160 سم - ميلاتوب 27',            price: 8575, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-91',  name: 'مرتبة طبية 160 سم - طبي 30',                price: 8500, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-92',  name: 'مرتبة طبية 160 سم - ميلاتوب 30',            price: 9000, category_id: 'cat-medical', image: IMG_MEDICAL },
+    /* مقاس 170 */
+    { id: 'p-93',  name: 'مرتبة طبية 170 سم - طبي 20',                price: 7000, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-94',  name: 'مرتبة طبية 170 سم - ميلاتوب 20',            price: 7500, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-95',  name: 'مرتبة طبية 170 سم - طبي 25',                price: 8100, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-96',  name: 'مرتبة طبية 170 سم - ميلاتوب 25',            price: 8600, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-97',  name: 'مرتبة طبية 170 سم - طبي 27',                price: 8550, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-98',  name: 'مرتبة طبية 170 سم - ميلاتوب 27',            price: 9050, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-99',  name: 'مرتبة طبية 170 سم - طبي 30',                price: 9000, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-100', name: 'مرتبة طبية 170 سم - ميلاتوب 30',            price: 9500, category_id: 'cat-medical', image: IMG_MEDICAL },
+    /* مقاس 180 */
+    { id: 'p-101', name: 'مرتبة طبية 180 سم - طبي 20',                price: 7350,  category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-102', name: 'مرتبة طبية 180 سم - ميلاتوب 20',            price: 7850,  category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-103', name: 'مرتبة طبية 180 سم - طبي 25',                price: 8550,  category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-104', name: 'مرتبة طبية 180 سم - ميلاتوب 25',            price: 9050,  category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-105', name: 'مرتبة طبية 180 سم - طبي 27',                price: 9025,  category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-106', name: 'مرتبة طبية 180 سم - ميلاتوب 27',            price: 9525,  category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-107', name: 'مرتبة طبية 180 سم - طبي 30',                price: 9500,  category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-108', name: 'مرتبة طبية 180 سم - ميلاتوب 30',            price: 10000, category_id: 'cat-medical', image: IMG_MEDICAL },
+    /* مقاس 190 */
+    { id: 'p-109', name: 'مرتبة طبية 190 سم - طبي 20',                price: 7700,  category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-110', name: 'مرتبة طبية 190 سم - ميلاتوب 20',            price: 8200,  category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-111', name: 'مرتبة طبية 190 سم - طبي 25',                price: 9100,  category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-112', name: 'مرتبة طبية 190 سم - ميلاتوب 25',            price: 9600,  category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-113', name: 'مرتبة طبية 190 سم - طبي 27',                price: 9500,  category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-114', name: 'مرتبة طبية 190 سم - ميلاتوب 27',            price: 10000, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-115', name: 'مرتبة طبية 190 سم - طبي 30',                price: 10000, category_id: 'cat-medical', image: IMG_MEDICAL },
+    { id: 'p-116', name: 'مرتبة طبية 190 سم - ميلاتوب 30',            price: 10500, category_id: 'cat-medical', image: IMG_MEDICAL },
+
+    /* ============ تكاوي — cat-takawi ============ */
+    { id: 'p-117', name: 'تكاية مربعة صغيرة',                         price: 170, category_id: 'cat-takawi', image: IMG_TAKY },
+    /* منتجان مؤقتان للمالك لإضافتهما/تعديلهما لاحقاً */
+    { id: 'p-118', name: 'تكاية إضافية (قيد التحديث)',                price: 0,   category_id: 'cat-takawi', image: IMG_TAKY },
+    { id: 'p-119', name: 'تكاية إضافية (قيد التحديث)',                price: 0,   category_id: 'cat-takawi', image: IMG_TAKY },
+
+    /* ============ مخدات — cat-pillows ============ */
+    { id: 'p-120', name: 'مخدة قطنية',                                price: 150, category_id: 'cat-pillows', image: IMG_PILLOW }
   ];
 
   /* ============================================================
@@ -800,7 +942,7 @@ document.addEventListener('DOMContentLoaded', function () {
       var img = p.image || fallbackImg;
       return '' +
         '<article class="prod-card group bg-white/[0.04] border border-white/10 rounded-3xl overflow-hidden transition-all duration-400 hover:border-gold/50 hover:-translate-y-1.5 hover:shadow-[0_25px_55px_rgba(255,234,0,0.12)]" ' +
-        'style="animation-delay:' + (i * 60) + 'ms">' +
+        'style="animation-delay:' + (i * 25) + 'ms">' +
           '<div class="relative h-52 overflow-hidden">' +
             '<img src="' + escapeHtml(img) + '" alt="' + escapeHtml(p.name) + '" loading="lazy" ' +
             'class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">' +
