@@ -133,7 +133,6 @@
 <!-- ================= HEADER ================= -->
 <header class="fixed top-0 inset-x-0 z-50 bg-[#050505]/85 backdrop-blur-xl border-b border-white/10">
   <div class="max-w-7xl mx-auto px-4 md:px-6 h-20 flex items-center justify-between gap-4">
-    <!-- Logo + Name -->
     <div class="flex items-center gap-3 min-w-0">
       <div class="w-12 h-12 rounded-2xl bg-gold flex items-center justify-center p-1.5 shrink-0 glow-gold">
         <img src="https://i.ibb.co/zVsSPsPY/file-00000000b79c8210bf4acd25c1b87fb5.png" alt="شعار مصنع العجمي" class="w-full h-full object-contain">
@@ -144,7 +143,6 @@
       </div>
     </div>
 
-    <!-- Actions -->
     <div class="flex items-center gap-2 md:gap-3">
       <button id="loginBtn" class="text-[10px] md:text-[11px] text-white/45 hover:text-gold transition-colors duration-300 px-2 py-1">
         تسجيل
@@ -353,7 +351,6 @@
   <div id="dashboardView" class="hidden min-h-screen">
     <div class="max-w-7xl mx-auto px-4 md:px-8 py-8">
 
-      <!-- Dash header -->
       <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-5 mb-8">
         <div class="flex items-center gap-3">
           <div class="w-12 h-12 rounded-2xl bg-gold flex items-center justify-center p-1.5 glow-gold">
@@ -371,7 +368,6 @@
         </div>
       </div>
 
-      <!-- Stats -->
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <div class="bg-white/[0.04] border border-white/10 rounded-2xl p-5">
           <p class="text-white/40 text-[11px] font-bold mb-1">الأقسام</p>
@@ -391,14 +387,12 @@
         </div>
       </div>
 
-      <!-- Tabs -->
       <div class="flex items-center gap-1.5 bg-white/[0.04] border border-white/10 p-1.5 rounded-2xl w-fit mb-7 overflow-x-auto no-scrollbar max-w-full">
         <button class="tab-btn active" data-tab="catTab">إدارة الأقسام</button>
         <button class="tab-btn" data-tab="prodTab">إدارة المنتجات</button>
         <button class="tab-btn" data-tab="orderTab">الطلبات</button>
       </div>
 
-      <!-- TAB 1 : CATEGORIES -->
       <div id="catTab" class="grid grid-cols-1 lg:grid-cols-5 gap-6">
         <div class="lg:col-span-2 bg-white/[0.04] border border-white/10 rounded-3xl p-6 h-fit">
           <h3 class="font-extrabold text-lg mb-1">إضافة قسم جديد</h3>
@@ -425,7 +419,6 @@
         </div>
       </div>
 
-      <!-- TAB 2 : PRODUCTS -->
       <div id="prodTab" class="hidden grid-cols-1 lg:grid-cols-5 gap-6">
         <div class="lg:col-span-2 bg-white/[0.04] border border-white/10 rounded-3xl p-6 h-fit">
           <h3 class="font-extrabold text-lg mb-1">إضافة منتج جديد</h3>
@@ -460,7 +453,6 @@
         </div>
       </div>
 
-      <!-- TAB 3 : ORDERS -->
       <div id="orderTab" class="hidden">
         <div class="bg-white/[0.04] border border-white/10 rounded-3xl p-10 md:p-16 text-center">
           <div class="w-20 h-20 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mx-auto mb-6">
@@ -493,35 +485,23 @@ document.addEventListener('DOMContentLoaded', function () {
   var IMG_TAKY    = 'https://i.ibb.co/qFB6t55v/90d697b1-d3a3-49c4-adfb-ea2da273129d.jpg';
   var IMG_PILLOW  = 'https://i.ibb.co/qFB6t55v/90d697b1-d3a3-49c4-adfb-ea2da273129d.jpg'; /* مؤقتاً */
 
-  /* رقم استقبال الطلبات على الواتساب (لا يظهر كنص داخل الموقع) */
   var WHATSAPP_NUMBER = '201003555377';
-
   var SUPABASE_URL = 'https://lcmjddknwlbmrtbpfvsr.supabase.co';
   var SUPABASE_KEY = 'sb_publishable_TeSRgTFkPk6zAr0NR6vbeg_8a4qi3_V';
-
   var ADMIN_EMAIL = 'msn3elagamy@gmail.com';
   var ADMIN_PASS  = 'elagamynum1ok';
 
-  var LS_CATS  = 'elagamy_categories_v2';
-  var LS_PRODS = 'elagamy_products_v2';
-  var LS_CART  = 'elagamy_cart_v2';
+  var LS_CATS  = 'elagamy_categories_v3';
+  var LS_PRODS = 'elagamy_products_v3';
+  var LS_CART  = 'elagamy_cart_v3';
 
-  /* ============================================================
-     SUPABASE CLIENT
-     ============================================================ */
   var sb = null;
   try {
     if (window.supabase && typeof window.supabase.createClient === 'function') {
       sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     }
-  } catch (err) {
-    console.warn('Supabase init skipped:', err);
-    sb = null;
-  }
+  } catch (err) { console.warn('Supabase init skipped:', err); }
 
-  /* ============================================================
-     DEFAULT (HARDCODED) DATA — بيانات حقيقية 100%
-     ============================================================ */
   var DEFAULT_CATEGORIES = [
     { id: 'cat-spring',  name: 'مراتب سوست', image: IMG_SPRING  },
     { id: 'cat-medical', name: 'مراتب طبية', image: IMG_MEDICAL },
@@ -530,55 +510,42 @@ document.addEventListener('DOMContentLoaded', function () {
   ];
 
   var DEFAULT_PRODUCTS = [
-    /* ============ مراتب سوست — cat-spring ============ */
-    /* مقاس 100 */
     { id: 'p-1',   name: 'مرتبة سوست 100 سم - سماكة 25',              price: 3850, category_id: 'cat-spring', image: IMG_SPRING },
     { id: 'p-2',   name: 'مرتبة سوست 100 سم - سماكة 27',              price: 4025, category_id: 'cat-spring', image: IMG_SPRING },
     { id: 'p-3',   name: 'مرتبة سوست 100 سم - سماكة 30',              price: 4200, category_id: 'cat-spring', image: IMG_SPRING },
     { id: 'p-4',   name: 'مرتبة سوست 100 سم - وجهين ميلاتوب 33',      price: 5375, category_id: 'cat-spring', image: IMG_SPRING },
-    /* مقاس 110 */
     { id: 'p-5',   name: 'مرتبة سوست 110 سم - سماكة 25',              price: 4200, category_id: 'cat-spring', image: IMG_SPRING },
     { id: 'p-6',   name: 'مرتبة سوست 110 سم - سماكة 27',              price: 4400, category_id: 'cat-spring', image: IMG_SPRING },
     { id: 'p-7',   name: 'مرتبة سوست 110 سم - سماكة 30',              price: 4600, category_id: 'cat-spring', image: IMG_SPRING },
     { id: 'p-8',   name: 'مرتبة سوست 110 سم - وجهين ميلاتوب 33',      price: 5800, category_id: 'cat-spring', image: IMG_SPRING },
-    /* مقاس 120 */
     { id: 'p-9',   name: 'مرتبة سوست 120 سم - سماكة 25',              price: 4550, category_id: 'cat-spring', image: IMG_SPRING },
     { id: 'p-10',  name: 'مرتبة سوست 120 سم - سماكة 27',              price: 4750, category_id: 'cat-spring', image: IMG_SPRING },
     { id: 'p-11',  name: 'مرتبة سوست 120 سم - سماكة 30',              price: 4950, category_id: 'cat-spring', image: IMG_SPRING },
     { id: 'p-12',  name: 'مرتبة سوست 120 سم - وجهين ميلاتوب 33',      price: 6150, category_id: 'cat-spring', image: IMG_SPRING },
-    /* مقاس 130 */
     { id: 'p-13',  name: 'مرتبة سوست 130 سم - سماكة 25',              price: 5000, category_id: 'cat-spring', image: IMG_SPRING },
     { id: 'p-14',  name: 'مرتبة سوست 130 سم - سماكة 27',              price: 5250, category_id: 'cat-spring', image: IMG_SPRING },
     { id: 'p-15',  name: 'مرتبة سوست 130 سم - سماكة 30',              price: 5500, category_id: 'cat-spring', image: IMG_SPRING },
     { id: 'p-16',  name: 'مرتبة سوست 130 سم - وجهين ميلاتوب 33',      price: 6750, category_id: 'cat-spring', image: IMG_SPRING },
-    /* مقاس 140 */
     { id: 'p-17',  name: 'مرتبة سوست 140 سم - سماكة 25',              price: 5400, category_id: 'cat-spring', image: IMG_SPRING },
     { id: 'p-18',  name: 'مرتبة سوست 140 سم - سماكة 27',              price: 5700, category_id: 'cat-spring', image: IMG_SPRING },
     { id: 'p-19',  name: 'مرتبة سوست 140 سم - سماكة 30',              price: 6000, category_id: 'cat-spring', image: IMG_SPRING },
     { id: 'p-20',  name: 'مرتبة سوست 140 سم - وجهين ميلاتوب 33',      price: 7300, category_id: 'cat-spring', image: IMG_SPRING },
-    /* مقاس 150 */
     { id: 'p-21',  name: 'مرتبة سوست 150 سم - سماكة 25',              price: 5550, category_id: 'cat-spring', image: IMG_SPRING },
     { id: 'p-22',  name: 'مرتبة سوست 150 سم - سماكة 27',              price: 5825, category_id: 'cat-spring', image: IMG_SPRING },
     { id: 'p-23',  name: 'مرتبة سوست 150 سم - سماكة 30',              price: 6100, category_id: 'cat-spring', image: IMG_SPRING },
     { id: 'p-24',  name: 'مرتبة سوست 150 سم - وجهين ميلاتوب 33',      price: 7375, category_id: 'cat-spring', image: IMG_SPRING },
-    /* مقاس 160 */
     { id: 'p-25',  name: 'مرتبة سوست 160 سم - سماكة 25',              price: 5900, category_id: 'cat-spring', image: IMG_SPRING },
     { id: 'p-26',  name: 'مرتبة سوست 160 سم - سماكة 27',              price: 6200, category_id: 'cat-spring', image: IMG_SPRING },
     { id: 'p-27',  name: 'مرتبة سوست 160 سم - سماكة 30',              price: 6500, category_id: 'cat-spring', image: IMG_SPRING },
     { id: 'p-28',  name: 'مرتبة سوست 160 سم - وجهين ميلاتوب 33',      price: 7800, category_id: 'cat-spring', image: IMG_SPRING },
-    /* مقاس 170 */
     { id: 'p-29',  name: 'مرتبة سوست 170 سم - سماكة 25',              price: 6200, category_id: 'cat-spring', image: IMG_SPRING },
     { id: 'p-30',  name: 'مرتبة سوست 170 سم - سماكة 27',              price: 6500, category_id: 'cat-spring', image: IMG_SPRING },
     { id: 'p-31',  name: 'مرتبة سوست 170 سم - سماكة 30',              price: 6800, category_id: 'cat-spring', image: IMG_SPRING },
     { id: 'p-32',  name: 'مرتبة سوست 170 سم - وجهين ميلاتوب 33',      price: 8100, category_id: 'cat-spring', image: IMG_SPRING },
-    /* مقاس 180 */
     { id: 'p-33',  name: 'مرتبة سوست 180 سم - سماكة 25',              price: 6550, category_id: 'cat-spring', image: IMG_SPRING },
     { id: 'p-34',  name: 'مرتبة سوست 180 سم - سماكة 27',              price: 6855, category_id: 'cat-spring', image: IMG_SPRING },
     { id: 'p-35',  name: 'مرتبة سوست 180 سم - سماكة 30',              price: 7160, category_id: 'cat-spring', image: IMG_SPRING },
     { id: 'p-36',  name: 'مرتبة سوست 180 سم - وجهين ميلاتوب 33',      price: 8600, category_id: 'cat-spring', image: IMG_SPRING },
-
-    /* ============ مراتب طبية — cat-medical ============ */
-    /* مقاس 100 */
     { id: 'p-37',  name: 'مرتبة طبية 100 سم - طبي 20',                price: 4300, category_id: 'cat-medical', image: IMG_MEDICAL },
     { id: 'p-38',  name: 'مرتبة طبية 100 سم - ميلاتوب 20',            price: 4800, category_id: 'cat-medical', image: IMG_MEDICAL },
     { id: 'p-39',  name: 'مرتبة طبية 100 سم - طبي 25',                price: 4950, category_id: 'cat-medical', image: IMG_MEDICAL },
@@ -587,7 +554,6 @@ document.addEventListener('DOMContentLoaded', function () {
     { id: 'p-42',  name: 'مرتبة طبية 100 سم - ميلاتوب 27',            price: 5725, category_id: 'cat-medical', image: IMG_MEDICAL },
     { id: 'p-43',  name: 'مرتبة طبية 100 سم - طبي 30',                price: 5500, category_id: 'cat-medical', image: IMG_MEDICAL },
     { id: 'p-44',  name: 'مرتبة طبية 100 سم - ميلاتوب 30',            price: 6000, category_id: 'cat-medical', image: IMG_MEDICAL },
-    /* مقاس 110 */
     { id: 'p-45',  name: 'مرتبة طبية 110 سم - طبي 20',                price: 4700, category_id: 'cat-medical', image: IMG_MEDICAL },
     { id: 'p-46',  name: 'مرتبة طبية 110 سم - ميلاتوب 20',            price: 5200, category_id: 'cat-medical', image: IMG_MEDICAL },
     { id: 'p-47',  name: 'مرتبة طبية 110 سم - طبي 25',                price: 5400, category_id: 'cat-medical', image: IMG_MEDICAL },
@@ -596,7 +562,6 @@ document.addEventListener('DOMContentLoaded', function () {
     { id: 'p-50',  name: 'مرتبة طبية 110 سم - ميلاتوب 27',            price: 6200, category_id: 'cat-medical', image: IMG_MEDICAL },
     { id: 'p-51',  name: 'مرتبة طبية 110 سم - طبي 30',                price: 6000, category_id: 'cat-medical', image: IMG_MEDICAL },
     { id: 'p-52',  name: 'مرتبة طبية 110 سم - ميلاتوب 30',            price: 6500, category_id: 'cat-medical', image: IMG_MEDICAL },
-    /* مقاس 120 */
     { id: 'p-53',  name: 'مرتبة طبية 120 سم - طبي 20',                price: 5100, category_id: 'cat-medical', image: IMG_MEDICAL },
     { id: 'p-54',  name: 'مرتبة طبية 120 سم - ميلاتوب 20',            price: 5600, category_id: 'cat-medical', image: IMG_MEDICAL },
     { id: 'p-55',  name: 'مرتبة طبية 120 سم - طبي 25',                price: 5850, category_id: 'cat-medical', image: IMG_MEDICAL },
@@ -605,7 +570,6 @@ document.addEventListener('DOMContentLoaded', function () {
     { id: 'p-58',  name: 'مرتبة طبية 120 سم - ميلاتوب 27',            price: 6675, category_id: 'cat-medical', image: IMG_MEDICAL },
     { id: 'p-59',  name: 'مرتبة طبية 120 سم - طبي 30',                price: 6500, category_id: 'cat-medical', image: IMG_MEDICAL },
     { id: 'p-60',  name: 'مرتبة طبية 120 سم - ميلاتوب 30',            price: 7000, category_id: 'cat-medical', image: IMG_MEDICAL },
-    /* مقاس 130 */
     { id: 'p-61',  name: 'مرتبة طبية 130 سم - طبي 20',                price: 5600, category_id: 'cat-medical', image: IMG_MEDICAL },
     { id: 'p-62',  name: 'مرتبة طبية 130 سم - ميلاتوب 20',            price: 6100, category_id: 'cat-medical', image: IMG_MEDICAL },
     { id: 'p-63',  name: 'مرتبة طبية 130 سم - طبي 25',                price: 6500, category_id: 'cat-medical', image: IMG_MEDICAL },
@@ -614,7 +578,6 @@ document.addEventListener('DOMContentLoaded', function () {
     { id: 'p-66',  name: 'مرتبة طبية 130 سم - ميلاتوب 27',            price: 7400, category_id: 'cat-medical', image: IMG_MEDICAL },
     { id: 'p-67',  name: 'مرتبة طبية 130 سم - طبي 30',                price: 7300, category_id: 'cat-medical', image: IMG_MEDICAL },
     { id: 'p-68',  name: 'مرتبة طبية 130 سم - ميلاتوب 30',            price: 7800, category_id: 'cat-medical', image: IMG_MEDICAL },
-    /* مقاس 140 */
     { id: 'p-69',  name: 'مرتبة طبية 140 سم - طبي 20',                price: 6000, category_id: 'cat-medical', image: IMG_MEDICAL },
     { id: 'p-70',  name: 'مرتبة طبية 140 سم - ميلاتوب 20',            price: 6500, category_id: 'cat-medical', image: IMG_MEDICAL },
     { id: 'p-71',  name: 'مرتبة طبية 140 سم - طبي 25',                price: 6900, category_id: 'cat-medical', image: IMG_MEDICAL },
@@ -623,7 +586,6 @@ document.addEventListener('DOMContentLoaded', function () {
     { id: 'p-74',  name: 'مرتبة طبية 140 سم - ميلاتوب 27',            price: 7850, category_id: 'cat-medical', image: IMG_MEDICAL },
     { id: 'p-75',  name: 'مرتبة طبية 140 سم - طبي 30',                price: 7800, category_id: 'cat-medical', image: IMG_MEDICAL },
     { id: 'p-76',  name: 'مرتبة طبية 140 سم - ميلاتوب 30',            price: 8300, category_id: 'cat-medical', image: IMG_MEDICAL },
-    /* مقاس 150 */
     { id: 'p-77',  name: 'مرتبة طبية 150 سم - طبي 20',                price: 6200, category_id: 'cat-medical', image: IMG_MEDICAL },
     { id: 'p-78',  name: 'مرتبة طبية 150 سم - ميلاتوب 20',            price: 6700, category_id: 'cat-medical', image: IMG_MEDICAL },
     { id: 'p-79',  name: 'مرتبة طبية 150 سم - طبي 25',                price: 7200, category_id: 'cat-medical', image: IMG_MEDICAL },
@@ -632,7 +594,6 @@ document.addEventListener('DOMContentLoaded', function () {
     { id: 'p-82',  name: 'مرتبة طبية 150 سم - ميلاتوب 27',            price: 8100, category_id: 'cat-medical', image: IMG_MEDICAL },
     { id: 'p-83',  name: 'مرتبة طبية 150 سم - طبي 30',                price: 8000, category_id: 'cat-medical', image: IMG_MEDICAL },
     { id: 'p-84',  name: 'مرتبة طبية 150 سم - ميلاتوب 30',            price: 8500, category_id: 'cat-medical', image: IMG_MEDICAL },
-    /* مقاس 160 */
     { id: 'p-85',  name: 'مرتبة طبية 160 سم - طبي 20',                price: 6600, category_id: 'cat-medical', image: IMG_MEDICAL },
     { id: 'p-86',  name: 'مرتبة طبية 160 سم - ميلاتوب 20',            price: 7100, category_id: 'cat-medical', image: IMG_MEDICAL },
     { id: 'p-87',  name: 'مرتبة طبية 160 سم - طبي 25',                price: 7650, category_id: 'cat-medical', image: IMG_MEDICAL },
@@ -641,7 +602,6 @@ document.addEventListener('DOMContentLoaded', function () {
     { id: 'p-90',  name: 'مرتبة طبية 160 سم - ميلاتوب 27',            price: 8575, category_id: 'cat-medical', image: IMG_MEDICAL },
     { id: 'p-91',  name: 'مرتبة طبية 160 سم - طبي 30',                price: 8500, category_id: 'cat-medical', image: IMG_MEDICAL },
     { id: 'p-92',  name: 'مرتبة طبية 160 سم - ميلاتوب 30',            price: 9000, category_id: 'cat-medical', image: IMG_MEDICAL },
-    /* مقاس 170 */
     { id: 'p-93',  name: 'مرتبة طبية 170 سم - طبي 20',                price: 7000, category_id: 'cat-medical', image: IMG_MEDICAL },
     { id: 'p-94',  name: 'مرتبة طبية 170 سم - ميلاتوب 20',            price: 7500, category_id: 'cat-medical', image: IMG_MEDICAL },
     { id: 'p-95',  name: 'مرتبة طبية 170 سم - طبي 25',                price: 8100, category_id: 'cat-medical', image: IMG_MEDICAL },
@@ -650,7 +610,6 @@ document.addEventListener('DOMContentLoaded', function () {
     { id: 'p-98',  name: 'مرتبة طبية 170 سم - ميلاتوب 27',            price: 9050, category_id: 'cat-medical', image: IMG_MEDICAL },
     { id: 'p-99',  name: 'مرتبة طبية 170 سم - طبي 30',                price: 9000, category_id: 'cat-medical', image: IMG_MEDICAL },
     { id: 'p-100', name: 'مرتبة طبية 170 سم - ميلاتوب 30',            price: 9500, category_id: 'cat-medical', image: IMG_MEDICAL },
-    /* مقاس 180 */
     { id: 'p-101', name: 'مرتبة طبية 180 سم - طبي 20',                price: 7350,  category_id: 'cat-medical', image: IMG_MEDICAL },
     { id: 'p-102', name: 'مرتبة طبية 180 سم - ميلاتوب 20',            price: 7850,  category_id: 'cat-medical', image: IMG_MEDICAL },
     { id: 'p-103', name: 'مرتبة طبية 180 سم - طبي 25',                price: 8550,  category_id: 'cat-medical', image: IMG_MEDICAL },
@@ -659,7 +618,6 @@ document.addEventListener('DOMContentLoaded', function () {
     { id: 'p-106', name: 'مرتبة طبية 180 سم - ميلاتوب 27',            price: 9525,  category_id: 'cat-medical', image: IMG_MEDICAL },
     { id: 'p-107', name: 'مرتبة طبية 180 سم - طبي 30',                price: 9500,  category_id: 'cat-medical', image: IMG_MEDICAL },
     { id: 'p-108', name: 'مرتبة طبية 180 سم - ميلاتوب 30',            price: 10000, category_id: 'cat-medical', image: IMG_MEDICAL },
-    /* مقاس 190 */
     { id: 'p-109', name: 'مرتبة طبية 190 سم - طبي 20',                price: 7700,  category_id: 'cat-medical', image: IMG_MEDICAL },
     { id: 'p-110', name: 'مرتبة طبية 190 سم - ميلاتوب 20',            price: 8200,  category_id: 'cat-medical', image: IMG_MEDICAL },
     { id: 'p-111', name: 'مرتبة طبية 190 سم - طبي 25',                price: 9100,  category_id: 'cat-medical', image: IMG_MEDICAL },
@@ -668,20 +626,12 @@ document.addEventListener('DOMContentLoaded', function () {
     { id: 'p-114', name: 'مرتبة طبية 190 سم - ميلاتوب 27',            price: 10000, category_id: 'cat-medical', image: IMG_MEDICAL },
     { id: 'p-115', name: 'مرتبة طبية 190 سم - طبي 30',                price: 10000, category_id: 'cat-medical', image: IMG_MEDICAL },
     { id: 'p-116', name: 'مرتبة طبية 190 سم - ميلاتوب 30',            price: 10500, category_id: 'cat-medical', image: IMG_MEDICAL },
-
-    /* ============ تكاوي — cat-takawi ============ */
     { id: 'p-117', name: 'تكاية مربعة صغيرة',                         price: 170, category_id: 'cat-takawi', image: IMG_TAKY },
-    /* منتجان مؤقتان للمالك لإضافتهما/تعديلهما لاحقاً */
     { id: 'p-118', name: 'تكاية إضافية (قيد التحديث)',                price: 0,   category_id: 'cat-takawi', image: IMG_TAKY },
     { id: 'p-119', name: 'تكاية إضافية (قيد التحديث)',                price: 0,   category_id: 'cat-takawi', image: IMG_TAKY },
-
-    /* ============ مخدات — cat-pillows ============ */
     { id: 'p-120', name: 'مخدة قطنية',                                price: 150, category_id: 'cat-pillows', image: IMG_PILLOW }
   ];
 
-  /* ============================================================
-     STATE
-     ============================================================ */
   var categories = [];
   var products = [];
   var cart = [];
@@ -689,23 +639,14 @@ document.addEventListener('DOMContentLoaded', function () {
   var isAdmin = false;
   var toastTimer = null;
 
-  /* ============================================================
-     HELPERS
-     ============================================================ */
   function escapeHtml(value) {
     return String(value == null ? '' : value).replace(/[&<>"']/g, function (m) {
       return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[m];
     });
   }
 
-  function uid(prefix) {
-    return prefix + '-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
-  }
-
-  function formatPrice(n) {
-    var num = Number(n) || 0;
-    return num.toLocaleString('en-US') + ' ج.م';
-  }
+  function uid(prefix) { return prefix + '-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+  function formatPrice(n) { var num = Number(n) || 0; return num.toLocaleString('en-US') + ' ج.م'; }
 
   function showToast(message) {
     var t = document.getElementById('toast');
@@ -718,150 +659,41 @@ document.addEventListener('DOMContentLoaded', function () {
     }, 2300);
   }
 
-  function lockScroll(lock) {
-    document.body.style.overflow = lock ? 'hidden' : '';
-  }
+  function lockScroll(lock) { document.body.style.overflow = lock ? 'hidden' : ''; }
 
   function parseJSON(raw, fallback) {
-    try {
-      var parsed = JSON.parse(raw);
-      return parsed == null ? fallback : parsed;
-    } catch (e) {
-      return fallback;
-    }
+    try { var parsed = JSON.parse(raw); return parsed == null ? fallback : parsed; } catch (e) { return fallback; }
   }
 
-  /* ============================================================
-     LOCAL STORAGE
-     ============================================================ */
   function loadLocal() {
     var rawCats = localStorage.getItem(LS_CATS);
     var rawProds = localStorage.getItem(LS_PRODS);
     var rawCart = localStorage.getItem(LS_CART);
 
-    if (rawCats === null) {
-      categories = DEFAULT_CATEGORIES.slice();
-    } else {
-      var c = parseJSON(rawCats, null);
-      categories = Array.isArray(c) ? c : DEFAULT_CATEGORIES.slice();
-    }
+    if (rawCats === null) categories = DEFAULT_CATEGORIES.slice();
+    else { var c = parseJSON(rawCats, null); categories = Array.isArray(c) ? c : DEFAULT_CATEGORIES.slice(); }
 
-    if (rawProds === null) {
-      products = DEFAULT_PRODUCTS.slice();
-    } else {
-      var p = parseJSON(rawProds, null);
-      products = Array.isArray(p) ? p : DEFAULT_PRODUCTS.slice();
-    }
+    if (rawProds === null) products = DEFAULT_PRODUCTS.slice();
+    else { var p = parseJSON(rawProds, null); products = Array.isArray(p) ? p : DEFAULT_PRODUCTS.slice(); }
 
     var ca = parseJSON(rawCart, []);
     cart = Array.isArray(ca) ? ca : [];
   }
 
-  function saveCategories() {
-    try { localStorage.setItem(LS_CATS, JSON.stringify(categories)); } catch (e) { console.warn(e); }
-  }
+  function saveCategories() { try { localStorage.setItem(LS_CATS, JSON.stringify(categories)); } catch (e) {} }
+  function saveProducts() { try { localStorage.setItem(LS_PRODS, JSON.stringify(products)); } catch (e) {} }
+  function saveCart() { try { localStorage.setItem(LS_CART, JSON.stringify(cart)); } catch (e) {} }
 
-  function saveProducts() {
-    try { localStorage.setItem(LS_PRODS, JSON.stringify(products)); } catch (e) { console.warn(e); }
-  }
-
-  function saveCart() {
-    try { localStorage.setItem(LS_CART, JSON.stringify(cart)); } catch (e) { console.warn(e); }
-  }
-
-  /* ============================================================
-     SUPABASE BACKGROUND SYNC (best effort)
-     ============================================================ */
-  function sbInsert(table, row) {
-    if (!sb) return;
-    try {
-      sb.from(table).insert([row]).then(function (res) {
-        if (res && res.error) console.warn('Supabase insert (' + table + '):', res.error.message);
-      }).catch(function (e) { console.warn('Supabase insert failed:', e); });
-    } catch (e) {
-      console.warn('Supabase insert exception:', e);
-    }
-  }
-
-  function sbDelete(table, id) {
-    if (!sb) return;
-    try {
-      sb.from(table).delete().eq('id', id).then(function (res) {
-        if (res && res.error) console.warn('Supabase delete (' + table + '):', res.error.message);
-      }).catch(function (e) { console.warn('Supabase delete failed:', e); });
-    } catch (e) {
-      console.warn('Supabase delete exception:', e);
-    }
-  }
-
-  function mapRemoteCategory(row) {
-    return {
-      id: row.id != null ? row.id : uid('cat'),
-      name: row.name || row.title || 'قسم بدون اسم',
-      image: row.image || row.image_url || IMG_SPRING
-    };
-  }
-
-  function mapRemoteProduct(row) {
-    return {
-      id: row.id != null ? row.id : uid('p'),
-      name: row.name || row.title || 'منتج بدون اسم',
-      price: Number(row.price) || 0,
-      category_id: row.category_id != null ? row.category_id : (row.categoryId != null ? row.categoryId : null),
-      image: row.image || row.image_url || ''
-    };
-  }
-
-  function fetchFromSupabase() {
-    if (!sb) return;
-
-    /* الأقسام */
-    try {
-      sb.from('categories').select('*').then(function (res) {
-        if (!res || res.error || !Array.isArray(res.data) || !res.data.length) return;
-        if (localStorage.getItem(LS_CATS) !== null) return; /* لا نتجاوز تعديلات المالك */
-        categories = res.data.map(mapRemoteCategory);
-        saveCategories();
-        renderCategories();
-        renderCategoryOptions();
-        renderAdminCategories();
-        updateStats();
-      }).catch(function (e) { console.warn('fetch categories failed', e); });
-    } catch (e) { console.warn(e); }
-
-    /* المنتجات */
-    try {
-      sb.from('products').select('*').then(function (res) {
-        if (!res || res.error || !Array.isArray(res.data) || !res.data.length) return;
-        if (localStorage.getItem(LS_PRODS) !== null) return;
-        products = res.data.map(mapRemoteProduct);
-        saveProducts();
-        if (activeCategory) renderProducts();
-        renderAdminProducts();
-        updateStats();
-      }).catch(function (e) { console.warn('fetch products failed', e); });
-    } catch (e) { console.warn(e); }
-  }
-
-  /* ============================================================
-     RENDER : CATEGORIES (CLIENT)
-     ============================================================ */
   function renderCategories() {
     var grid = document.getElementById('categoriesGrid');
     if (!grid) return;
-
     if (!categories.length) {
-      grid.innerHTML =
-        '<div class="col-span-full text-center py-16 text-white/35 text-sm font-bold">' +
-        'لا توجد أقسام حالياً — يمكن للمالك إضافة أقسام من لوحة التحكم.' +
-        '</div>';
+      grid.innerHTML = '<div class="col-span-full text-center py-16 text-white/35 text-sm font-bold">لا توجد أقسام حالياً.</div>';
       return;
     }
-
     grid.innerHTML = categories.map(function (cat, i) {
       var img = cat.image || IMG_SPRING;
-      return '' +
-        '<article class="cat-card group relative overflow-hidden rounded-3xl cursor-pointer border border-white/10 bg-white/5 transition-all duration-500 hover:border-gold/50 hover:shadow-[0_25px_60px_rgba(255,234,0,0.14)]" ' +
+      return '<article class="cat-card group relative overflow-hidden rounded-3xl cursor-pointer border border-white/10 bg-white/5 transition-all duration-500 hover:border-gold/50 hover:shadow-[0_25px_60px_rgba(255,234,0,0.14)]" ' +
         'data-cat-id="' + escapeHtml(cat.id) + '" style="animation-delay:' + (i * 90) + 'ms">' +
           '<div class="relative h-64 md:h-72 overflow-hidden">' +
             '<img src="' + escapeHtml(img) + '" alt="' + escapeHtml(cat.name) + '" loading="lazy" ' +
@@ -883,9 +715,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }).join('');
   }
 
-  /* ============================================================
-     RENDER : PRODUCTS (CLIENT)
-     ============================================================ */
   function findCategory(id) {
     for (var i = 0; i < categories.length; i++) {
       if (String(categories[i].id) === String(id)) return categories[i];
@@ -900,7 +729,9 @@ document.addEventListener('DOMContentLoaded', function () {
     var prodSection = document.getElementById('products');
     if (catSection) catSection.classList.add('hidden');
     if (prodSection) prodSection.classList.remove('hidden');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(function() {
+      if (prodSection) prodSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 50);
   }
 
   function closeCategory() {
@@ -963,9 +794,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }).join('');
   }
 
-  /* ============================================================
-     CART
-     ============================================================ */
   function cartTotalValue() {
     return cart.reduce(function (sum, item) {
       return sum + (Number(item.price) || 0) * (Number(item.qty) || 0);
@@ -1131,9 +959,6 @@ document.addEventListener('DOMContentLoaded', function () {
     window.open(url, '_blank');
   }
 
-  /* ============================================================
-     ADMIN : RENDER LISTS
-     ============================================================ */
   function renderAdminCategories() {
     var box = document.getElementById('adminCategoriesList');
     var badge = document.getElementById('catListCount');
@@ -1217,9 +1042,6 @@ document.addEventListener('DOMContentLoaded', function () {
     if (s4) s4.textContent = '0';
   }
 
-  /* ============================================================
-     ADMIN : LOGIN / VIEWS
-     ============================================================ */
   function showLoginView() {
     document.getElementById('loginView').classList.remove('hidden');
     document.getElementById('dashboardView').classList.add('hidden');
@@ -1306,7 +1128,6 @@ document.addEventListener('DOMContentLoaded', function () {
             if (res && !res.error && res.data && res.data.user) {
               finish(true);
             } else {
-              /* في حال تعذر الاتصال بالسيرفر أو عدم وجود المستخدم، نسمح بالدخول المحلي للحساب الرسمي */
               finish(localFallbackOk);
             }
           })
@@ -1332,9 +1153,6 @@ document.addEventListener('DOMContentLoaded', function () {
     showToast('تم تسجيل الخروج');
   }
 
-  /* ============================================================
-     ADMIN : ADD / DELETE
-     ============================================================ */
   function handleAddCategory(event) {
     event.preventDefault();
 
@@ -1354,8 +1172,6 @@ document.addEventListener('DOMContentLoaded', function () {
     renderAdminCategories();
     renderCategoryOptions();
     updateStats();
-
-    sbInsert('categories', { name: name, image: image });
 
     nameInput.value = '';
     imageInput.value = '';
@@ -1393,7 +1209,6 @@ document.addEventListener('DOMContentLoaded', function () {
     if (activeCategory) renderProducts();
     updateStats();
 
-    sbDelete('categories', id);
     showToast('تم حذف القسم');
   }
 
@@ -1434,8 +1249,6 @@ document.addEventListener('DOMContentLoaded', function () {
     renderAdminProducts();
     updateStats();
 
-    sbInsert('products', { name: name, price: price, category_id: categoryId, image: image });
-
     nameInput.value = '';
     priceInput.value = '';
     imageInput.value = '';
@@ -1458,34 +1271,25 @@ document.addEventListener('DOMContentLoaded', function () {
     renderAdminProducts();
     updateStats();
 
-    sbDelete('products', id);
     showToast('تم حذف المنتج');
   }
 
-  /* ============================================================
-     EVENT BINDINGS
-     ============================================================ */
   function bindEvents() {
-
-    /* Header */
     document.getElementById('loginBtn').addEventListener('click', openAdmin);
     document.getElementById('cartBtn').addEventListener('click', openCart);
     document.getElementById('heroCart').addEventListener('click', openCart);
 
-    /* Hero CTA */
     document.getElementById('heroCta').addEventListener('click', function () {
       var target = document.getElementById('categories');
       if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
 
-    /* Categories delegation */
     document.getElementById('categoriesGrid').addEventListener('click', function (e) {
       var card = e.target.closest('[data-cat-id]');
       if (!card) return;
       openCategory(card.getAttribute('data-cat-id'));
     });
 
-    /* Products delegation */
     document.getElementById('productsGrid').addEventListener('click', function (e) {
       var btn = e.target.closest('[data-add]');
       if (!btn) return;
@@ -1494,7 +1298,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.getElementById('backToCategories').addEventListener('click', closeCategory);
 
-    /* Cart */
     document.getElementById('closeCart').addEventListener('click', closeCart);
     document.getElementById('cartOverlay').addEventListener('click', closeCart);
     document.getElementById('checkoutBtn').addEventListener('click', checkout);
@@ -1511,13 +1314,11 @@ document.addEventListener('DOMContentLoaded', function () {
       else if (action === 'remove') removeFromCart(id);
     });
 
-    /* Admin screen */
     document.getElementById('closeLogin').addEventListener('click', closeAdmin);
     document.getElementById('backToSite').addEventListener('click', closeAdmin);
     document.getElementById('logoutBtn').addEventListener('click', handleLogout);
     document.getElementById('loginForm').addEventListener('submit', handleLogin);
 
-    /* Tabs */
     var tabButtons = document.querySelectorAll('.tab-btn');
     tabButtons.forEach(function (btn) {
       btn.addEventListener('click', function () {
@@ -1542,11 +1343,9 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     });
 
-    /* Admin forms */
     document.getElementById('catForm').addEventListener('submit', handleAddCategory);
     document.getElementById('prodForm').addEventListener('submit', handleAddProduct);
 
-    /* Admin lists delegation */
     document.getElementById('adminCategoriesList').addEventListener('click', function (e) {
       var btn = e.target.closest('[data-del-cat]');
       if (!btn) return;
@@ -1559,7 +1358,6 @@ document.addEventListener('DOMContentLoaded', function () {
       deleteProduct(btn.getAttribute('data-del-prod'));
     });
 
-    /* ESC key */
     document.addEventListener('keydown', function (e) {
       if (e.key !== 'Escape') return;
       if (!document.getElementById('adminScreen').classList.contains('hidden')) {
@@ -1570,9 +1368,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  /* ============================================================
-     INIT
-     ============================================================ */
   function init() {
     loadLocal();
 
@@ -1593,9 +1388,6 @@ document.addEventListener('DOMContentLoaded', function () {
     updateStats();
 
     bindEvents();
-
-    /* محاولة جلب البيانات من Supabase كخطوة ثانية (دون تعطيل الواجهة) */
-    setTimeout(fetchFromSupabase, 400);
   }
 
   init();
