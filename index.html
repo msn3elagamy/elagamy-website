@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مصنع العجمي | نوم مريح يليق بيك</title>
+    
+    <!-- خط Cairo الفخم -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { cairo: ['Cairo', 'sans-serif'] },
+                    colors: { primary: '#FFD700', dark: '#050505', card: '#121212', borderSoft: 'rgba(255, 215, 0, 0.15)' }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <style>
+        body { 
+            background-color: #050505; 
+            color: #ffffff; 
+            font-family: 'Cairo', sans-serif; 
+            overflow-x: hidden; 
+        }
+        .text-glow { text-shadow: 0 0 30px rgba(255, 215, 0, 0.6); }
+        .glass { background: rgba(18, 18, 18, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); }
+        .hide { display: none !important; }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb { background: #FFD700; border-radius: 10px; }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-up { animation: fadeInUp 0.8s ease-out forwards; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- الهيدر الفخم -->
+    <header class="sticky top-0 z-50 glass py-4 px-6 md:px-12 flex justify-between items-center shadow-2xl">
+        <div class="flex items-center gap-4 cursor-pointer" onclick="showPage('home')">
+            <div class="bg-primary p-1 rounded-2xl shadow-[0_0_15px_rgba(255,215,0,0.4)]">
+                <img src="https://i.ibb.co/FLS7f0ph/9e168d62-fde9-4dd4-aad1-3e5ccb66cc44.jpg" alt="العجمي" class="h-12 w-12 object-contain rounded-xl">
+            </div>
+            <h1 class="text-3xl font-black tracking-wide text-white">مصنع <span class="text-primary text-glow">العجمي</span></h1>
+        </div>
+        <div class="flex items-center gap-6">
+            <!-- تسجيل المالك (خط صغير جداً عشان محدش ياخد باله) -->
+            <button onclick="showPage('admin')" class="text-[10px] text-gray-600 hover:text-primary transition-colors">تسجيل</button>
+            
+            <!-- السلة -->
+            <button onclick="toggleCart()" class="relative bg-primary text-black py-2 px-6 rounded-full font-bold hover:scale-105 transition-all duration-300 shadow-[0_0_20px_rgba(255,215,0,0.3)]">
+                السلة
+                <svg class="w-5 h-5 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                <span id="cart-count" class="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center hide">0</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- الصفحة الرئيسية -->
+    <main id="page-home" class="flex-grow">
+        <!-- البانر العملاق -->
+        <section class="relative h-[80vh] flex items-center justify-center text-center px-4 overflow-hidden border-b border-borderSoft">
+            <div class="absolute inset-0 bg-[url('https://i.ibb.co/KcnNPvNq/9bb098ca-3990-4941-9c56-0b6993a994f9.jpg')] bg-cover bg-center opacity-25"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-dark via-dark/90 to-transparent"></div>
+            
+            <div class="relative z-10 max-w-5xl mx-auto animate-fade-up">
+                <h2 class="text-5xl md:text-8xl font-black mb-6 leading-tight text-white">
+                    نوم مريح <br> 
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-yellow-600 text-glow">يليق بيك</span>
+                </h2>
+                <p class="text-xl md:text-2xl text-gray-300 mb-12 max-w-2xl mx-auto font-light">اكتشف مجموعتنا الحصرية من المراتب السوست والطبية بأعلى جودة وأسعار المصنع مباشرة.</p>
+                <button onclick="document.getElementById('categories-section').scrollIntoView({behavior: 'smooth'})" class="bg-white text-black font-black py-5 px-14 rounded-full text-xl hover:bg-primary hover:scale-105 transition-all duration-300 shadow-[0_0_30px_rgba(255,255,255,0.2)]">
+                    اكتشف منتجاتنا
+                </button>
+            </div>
+        </section>
+
+        <!-- قسم الأقسام -->
+        <section id="categories-section" class="py-24 px-6 md:px-12 max-w-7xl mx-auto">
+            <div class="flex items-center justify-center gap-6 mb-16">
+                <div class="h-[2px] w-24 bg-gradient-to-l from-transparent to-primary"></div>
+                <h3 class="text-4xl md:text-5xl font-black text-white">أقسامنا</h3>
+                <div class="h-[2px] w-24 bg-gradient-to-r from-transparent to-primary"></div>
+            </div>
+            
+            <div id="categories-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                <!-- سيتم حقن الأقسام هنا لايف -->
+            </div>
+        </section>
+    </main>
+
+    <!-- صفحة المنتجات -->
+    <main id="page-category" class="flex-grow hide pt-12 px-6 md:px-12 max-w-7xl mx-auto w-full">
+        <button onclick="showPage('home')" class="text-primary mb-10 flex items-center gap-2 hover:text-white transition font-bold text-lg">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg> عودة للأقسام
+        </button>
+        <h2 id="category-title" class="text-5xl font-black mb-12 border-r-8 border-primary pr-6 text-white"></h2>
+        <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10"></div>
+    </main>
+
+    <!-- صفحة تسجيل المالك -->
+    <main id="page-admin" class="flex-grow hide flex items-center justify-center py-20 px-6">
+        <div class="glass p-12 rounded-3xl w-full max-w-md shadow-2xl border border-borderSoft">
+            <h2 class="text-4xl font-black mb-10 text-center text-white">لوحة <span class="text-primary">التحكم</span></h2>
+            <input type="email" id="admin-email" placeholder="الإيميل" class="w-full bg-black border border-white/10 rounded-xl p-5 mb-5 text-white focus:outline-none focus:border-primary transition-colors text-lg">
+            <input type="password" id="admin-password" placeholder="الباسورد" class="w-full bg-black border border-white/10 rounded-xl p-5 mb-8 text-white focus:outline-none focus:border-primary transition-colors text-lg">
+            <button onclick="loginAdmin()" class="w-full bg-primary text-black font-black py-5 rounded-xl hover:bg-yellow-500 hover:scale-105 transition-all text-xl shadow-[0_0_20px_rgba(255,215,0,0.3)]">دخول</button>
+            <p id="login-msg" class="text-center text-red-500 mt-6 text-sm font-bold"></p>
+        </div>
+    </main>
+
+    <!-- لوحة تحكم المالك (بعد الدخول) -->
+    <main id="page-dashboard" class="flex-grow hide pt-12 px-6 md:px-12 max-w-7xl mx-auto w-full">
+        <div class="flex justify-between items-center mb-12">
+            <h2 class="text-5xl font-black text-primary text-glow">لوحة التحكم</h2>
+            <button onclick="logoutAdmin()" class="bg-red-600/20 text-red-500 px-8 py-3 rounded-full hover:bg-red-600 hover:text-white transition font-bold text-lg">خروج</button>
+        </div>
+        <div class="glass border border-borderSoft rounded-3xl p-12 text-center shadow-2xl">
+            <h3 class="text-3xl font-bold mb-6 text-white">أهلاً بك يا مالك المصنع 👑</h3>
+            <p class="text-gray-400 mb-10 text-lg">من هنا ستتمكن من إضافة أقسام جديدة، منتجات، وتعديل الأسعار (سيتم تفعيل الإضافة في الخطوة القادمة).</p>
+        </div>
+    </main>
+
+    <!-- السلة الجانبية -->
+    <div id="cart-overlay" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] hide transition-opacity" onclick="toggleCart()"></div>
+    <aside id="cart-sidebar" class="fixed top-0 left-0 h-full w-full md:w-[450px] glass border-l border-borderSoft z-[101] transform -translate-x-full transition-transform duration-500 flex flex-col shadow-2xl">
+        <div class="p-8 border-b border-white/10 flex justify-between items-center bg-black/50">
+            <h2 class="text-3xl font-black text-white">سلة المشتريات</h2>
+            <button onclick="toggleCart()" class="text-gray-400 hover:text-primary text-4xl font-light transition-colors">&times;</button>
+        </div>
+        <div id="cart-items" class="flex-grow p-8 overflow-y-auto space-y-6"></div>
+        <div class="p-8 border-t border-white/10 bg-black/80">
+            <div class="flex justify-between items-center mb-8 text-3xl font-black text-white">
+                <span>الإجمالي:</span>
+                <span id="cart-total" class="text-primary text-glow">0 ج.م</span>
+            </div>
+            <button onclick="checkoutWhatsApp()" class="w-full bg-[#25D366] text-white font-black py-5 rounded-2xl flex items-center justify-center gap-3 hover:bg-green-500 hover:scale-105 transition-all shadow-[0_0_20px_rgba(37,211,102,0.4)] text-xl">
+                <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                إتمام الطلب
+            </button>
+        </div>
+    </aside>
+
+    <!-- زرار الواتساب العايم (لوجو فقط) -->
+    <a href="https://wa.me/201003555377" target="_blank" class="fixed bottom-8 left-8 bg-[#25D366] text-white p-4 rounded-full shadow-[0_0_30px_rgba(37,211,102,0.5)] hover:scale-110 transition-transform z-[90]">
+        <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    </a>
+
+    <!-- الفوتر -->
+    <footer class="bg-black border-t border-borderSoft py-10 text-center mt-auto">
+        <p class="text-2xl font-black mb-2 text-white">مصنع العجمي للمراتب</p>
+        <p class="text-gray-400 mb-2">الرياض مركز منية النصر المنصورة دقهلية</p>
+        <p class="text-primary font-bold dir-ltr text-lg">Symphony of Quality</p>
+    </footer>
+    <script>
+        // 1. إعدادات سوبابيز
+        const supabaseUrl = "https://lcmjddknwlbmrtbpfvsr.supabase.co";
+        const supabaseKey = "sb_publishable_TeSRgTFkPk6zAr0NR6vbeg_8a4qi3_V";
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+        let cart = [];
+
+        // 2. أقسام افتراضية تظهر فوراً (عشان مفيش صفحة فاضية لو الداتا بيز لسه مفيهاش حاجة)
+        const defaultCategories = [
+            { id: '1', name: 'المراتب السوست', img: 'https://i.ibb.co/KcnNPvNq/9bb098ca-3990-4941-9c56-0b6993a994f9.jpg' },
+            { id: '2', name: 'المراتب الطبي', img: 'https://i.ibb.co/ns1ZWLSK/a5cb30da-52a4-4545-a09d-6c6cf6a230a6.jpg' },
+            { id: '3', name: 'التكاوي', img: 'https://i.ibb.co/qFB6t55v/90d697b1-d3a3-49c4-adfb-ea2da273129d.jpg' },
+            { id: '4', name: 'المخدات', img: 'https://i.ibb.co/qFB6t55v/90d697b1-d3a3-49c4-adfb-ea2da273129d.jpg' },
+            { id: '5', name: 'أخرى', img: 'https://i.ibb.co/FLS7f0ph/9e168d62-fde9-4dd4-aad1-3e5ccb66cc44.jpg' }
+        ];
+
+        // 3. التنقل بين الصفحات
+        function showPage(pageId) {
+            ['home', 'category', 'admin', 'dashboard'].forEach(p => {
+                const el = document.getElementById(`page-${p}`);
+                if(el) el.classList.add('hide');
+            });
+            const target = document.getElementById(`page-${pageId}`);
+            if(target) target.classList.remove('hide');
+            window.scrollTo(0, 0);
+        }
+
+        // 4. عرض الأقسام
+        function renderCategories(cats) {
+            const grid = document.getElementById('categories-grid');
+            if(!grid) return;
+            
+            grid.innerHTML = cats.map(cat => `
+                <div onclick="loadCategoryProducts('${cat.id}', '${cat.name}')" class="group relative h-80 rounded-3xl overflow-hidden cursor-pointer border border-white/5 hover:border-primary/50 shadow-xl hover:shadow-[0_0_30px_rgba(255,215,0,0.15)] transition-all duration-500">
+                    <img src="${cat.img || 'https://i.ibb.co/FLS7f0ph/9e168d62-fde9-4dd4-aad1-3e5ccb66cc44.jpg'}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-60">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+                    <div class="absolute bottom-8 right-8 left-8 flex justify-between items-end">
+                        <h4 class="text-3xl font-black text-white group-hover:text-primary transition-colors">${cat.name}</h4>
+                        <div class="bg-primary text-black p-3 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-4 group-hover:translate-y-0 shadow-lg">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 5. منتجات افتراضية (تظهر لحد ما نضيف منتجات حقيقية في الداتا بيز)
+        const demoProducts = [
+            { name: 'مرتبة سوست 160 سم (سماكة 30)', price: 6500, img: 'https://i.ibb.co/KcnNPvNq/9bb098ca-3990-4941-9c56-0b6993a994f9.jpg' },
+            { name: 'مرتبة سوست 180 سم (وجهين 33)', price: 8600, img: 'https://i.ibb.co/KcnNPvNq/9bb098ca-3990-4941-9c56-0b6993a994f9.jpg' },
+            { name: 'مرتبة طبية 160 سم (ميلاتوب)', price: 8575, img: 'https://i.ibb.co/ns1ZWLSK/a5cb30da-52a4-4545-a09d-6c6cf6a230a6.jpg' },
+            { name: 'مرتبة طبية 190 سم (سماكة 30)', price: 10000, img: 'https://i.ibb.co/ns1ZWLSK/a5cb30da-52a4-4545-a09d-6c6cf6a230a6.jpg' },
+            { name: 'تكاية مربعة صغيرة', price: 170, img: 'https://i.ibb.co/qFB6t55v/90d697b1-d3a3-49c4-adfb-ea2da273129d.jpg' }
+        ];
+
+        function loadCategoryProducts(id, name) {
+            document.getElementById('category-title').innerText = name;
+            showPage('category');
+            const grid = document.getElementById('products-grid');
+            
+            // هنا مستقبلاً هنفلتر المنتجات بناءً على القسم
+            grid.innerHTML = demoProducts.map(p => `
+                <div class="glass border border-white/5 rounded-3xl overflow-hidden group hover:border-primary/50 transition-colors duration-300">
+                    <div class="h-72 overflow-hidden bg-black relative">
+                        <img src="${p.img}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90">
+                    </div>
+                    <div class="p-8 text-center border-t border-white/5">
+                        <h4 class="text-2xl font-bold mb-3 text-white">${p.name}</h4>
+                        <p class="text-primary text-3xl font-black mb-6 text-glow">${p.price} <span class="text-lg font-normal text-gray-400">ج.م</span></p>
+                        <button onclick="addToCart('${p.name}', ${p.price})" class="w-full bg-white/5 border border-white/10 text-white hover:bg-primary hover:text-black font-black py-4 rounded-xl transition-all duration-300 text-lg">أضف للسلة</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 6. السلة (Cart)
+        function toggleCart() {
+            const sidebar = document.getElementById('cart-sidebar');
+            const overlay = document.getElementById('cart-overlay');
+            if (sidebar.classList.contains('-translate-x-full')) {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hide');
+                // منع التمرير في الخلفية
+                document.body.style.overflow = 'hidden';
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hide');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        function addToCart(name, price) {
+            cart.push({ name, price });
+            updateCartUI();
+            document.getElementById('cart-count').classList.remove('hide');
+            if(!document.getElementById('cart-sidebar').classList.contains('translate-x-0')) {
+                toggleCart();
+            }
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const cartItems = document.getElementById('cart-items');
+            const cartCount = document.getElementById('cart-count');
+            const cartTotal = document.getElementById('cart-total');
+            
+            cartCount.innerText = cart.length;
+            
+            if(cart.length === 0) {
+                cartCount.classList.add('hide');
+                cartItems.innerHTML = `<p class="text-center text-gray-500 mt-12 font-bold text-xl">السلة فاضية 🛒</p>`;
+                cartTotal.innerText = "0 ج.م";
+                return;
+            }
+
+            let total = 0;
+            cartItems.innerHTML = cart.map((item, index) => {
+                total += item.price;
+                return `
+                <div class="flex justify-between items-center bg-black/50 p-5 rounded-2xl border border-white/5">
+                    <div>
+                        <h4 class="font-bold text-white text-lg">${item.name}</h4>
+                        <p class="text-primary font-black text-xl mt-1">${item.price} ج.م</p>
+                    </div>
+                    <button onclick="removeFromCart(${index})" class="text-red-500 hover:text-white bg-red-500/10 hover:bg-red-500 p-3 rounded-xl transition-all">✖</button>
+                </div>
+                `;
+            }).join('');
+            
+            cartTotal.innerText = total.toLocaleString() + " ج.م";
+        }
+
+        // 7. الدفع عبر الواتساب
+        function checkoutWhatsApp() {
+            if(cart.length === 0) return alert("السلة فاضية! أضف منتجات أولاً.");
+            
+            let message = "مرحباً مصنع العجمي، أريد تأكيد الطلب التالي:\n\n";
+            let total = 0;
+            
+            cart.forEach((item, i) => {
+                message += `${i+1}. ${item.name} - ${item.price} ج.م\n`;
+                total += item.price;
+            });
+            
+            message += `\n💰 الإجمالي: ${total.toLocaleString()} ج.م\n`;
+            message += `\nأرجو التواصل معي لتأكيد التوصيل.";
+            
+            const phone = "201003555377"; // رقم الواتساب
+            window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
+        }
+
+        // 8. تسجيل دخول المالك
+        async function loginAdmin() {
+            const email = document.getElementById('admin-email').value;
+            const password = document.getElementById('admin-password').value;
+            const msg = document.getElementById('login-msg');
+            
+            if(!email || !password) {
+                msg.innerText = "برجاء إدخال الإيميل والباسورد";
+                return;
+            }
+
+            msg.innerText = "جاري التحقق...";
+            msg.classList.remove('text-red-500');
+            msg.classList.add('text-primary');
+
+            const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+            
+            if (error) {
+                msg.innerText = "خطأ: الإيميل أو الباسورد غير صحيح";
+                msg.classList.remove('text-primary');
+                msg.classList.add('text-red-500');
+            } else {
+                msg.innerText = "";
+                showPage('dashboard');
+            }
+        }
+
+        // 9. تسجيل خروج المالك
+        async function logoutAdmin() {
+            await supabase.auth.signOut();
+            showPage('home');
+        }
+
+        // 10. التشغيل عند تحميل الصفحة
+        window.onload = () => {
+            // عرض الأقسام مباشرة
+            renderCategories(defaultCategories); 
+            updateCartUI();
+            
+            // محاولة جلب الأقسام الحقيقية من الداتا بيز لتحديثها
+            supabase.from('categories').select('*').then(({data, error}) => {
+                if(data && data.length > 0) {
+                    // لو الداتا بترجع صور، هنمررها، لو مفيش هنستخدم الصور الافتراضية
+                    const catsWithImages = data.map((cat, index) => {
+                        let img = defaultCategories.find(d => d.name === cat.name)?.img || 'https://i.ibb.co/FLS7f0ph/9e168d62-fde9-4dd4-aad1-3e5ccb66cc44.jpg';
+                        return { ...cat, img };
+                    });
+                    renderCategories(catsWithImages);
+                }
+            });
+        };
+    </script>
+</body>
+</html>
